@@ -1,0 +1,6 @@
+# textdomain: protect_block_area
+Protection Block=
+Create areas quickly=
+You are not allowed to protect!=
+Area protection block, ID: @1=
+Failed.=
