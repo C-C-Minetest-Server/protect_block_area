@@ -111,3 +111,13 @@ minetest.register_node("protect_block_area:protect", {
 	end
 })
 
+if not minetest.global_exists("protector") then
+	minetest.register_craft({
+		output = "protect_block_area:protect",
+		recipe = {
+			{"default:stone", "default:stone", "default:stone"},
+			{"default:stone", "default:gold_ingot", "default:stone"},
+			{"default:stone", "default:stone", "default:stone"}
+		}
+	})
+
