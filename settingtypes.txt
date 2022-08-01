@@ -1,0 +1,5 @@
+# Area protector radius (fallback: protector_radius)
+area_protector_radius (Area protector radius) int 5
+
+# Area protector placing delay
+area_protector_delay (Area protector placing delay) int 2

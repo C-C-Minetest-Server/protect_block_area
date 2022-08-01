@@ -1,6 +1,7 @@
 # textdomain: protect_block_area
 Protection Block=
 Create areas quickly=
+You cannot place more than 1 protector blocks within @1 seconds!=
 You are not allowed to protect!=
 Area protection block, ID: @1=
 Failed.=

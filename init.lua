@@ -1,7 +1,10 @@
 local aS = minetest.get_translator("areas")
 local S = minetest.get_translator("protect_block_area")
 
-local protector_radius = tonumber(minetest.settings:get("protector_radius")) or 5
+local protector_radius = tonumber(minetest.settings:get("area_protector_radius")) or tonumber(minetest.settings:get("protector_radius")) or 5
+local protector_placing_delay = tonumber(minetest.settings:get("area_protector_delay")) or 2
+
+local in_delay = {}
 
 local function get_node_place_position(pointed_thing)
 	if pointed_thing.type ~= "node" then return false end
@@ -37,6 +40,10 @@ minetest.register_node("protect_block_area:protect", {
 			return itemstack
 		end
 		local pname = placer:get_player_name()
+		if in_delay[pname] then
+			minetest.chat_send_player(pname,S("You cannot place more than 1 protector blocks within @1 seconds!",protector_placing_delay))
+			return itemstack
+		end
 		local privs = minetest.get_player_privs(pname)
 		if not privs[areas.config.self_protection_privilege] then
 			minetest.chat_send_player(pname,S("You are not allowed to protect!"))
@@ -70,6 +77,10 @@ minetest.register_node("protect_block_area:protect", {
 		local meta = minetest.get_meta(pos)
 		meta:set_int("AreaID",id)
 		meta:set_string("infotext",S("Area protection block, ID: @1",id))
+		in_delay[pname] = true
+		minetest.after(protector_placing_delay,function()
+			in_delay[pname] = false
+		end)
 		return itemstack
 	end,
 	on_dig = function(pos,node,digger)
@@ -120,4 +131,5 @@ if not minetest.global_exists("protector") then
 			{"default:stone", "default:stone", "default:stone"}
 		}
 	})
+end
 

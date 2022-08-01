@@ -1,7 +1,6 @@
 # textdomain: protect_block_area
 Protection Block=保護區方塊
 Create areas quickly=快速保護區域
-You cannot place more than 1 protector blocks within @1 seconds!=在@1秒之內只可放置一個保護區方塊！
 You are not allowed to protect!=你無權保護區域！
 Area protection block, ID: @1=保護區方塊，區域ID：@1
 Failed.=失敗。
