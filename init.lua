@@ -91,6 +91,13 @@ minetest.register_node("protect_block_area:protect", {
 		local id = areas:add(pname, "Protected by protector block at " .. minetest.pos_to_string(pos), pos1, pos2, nil)
 		areas:save()
 
+		if minetest.get_modpath("vizlib") then
+			vizlib.draw_area(vector.add(pos1, 0.5), vector.add(pos2, -0.5), {
+				color = "#7ba428",
+				player = placer,
+			})
+		end
+
 		minetest.chat_send_player(pname, aS("Area protected. ID: @1", id))
 
 		if not minetest.is_creative_enabled(pname) then
@@ -140,9 +147,17 @@ minetest.register_node("protect_block_area:protect", {
 			minetest.remove_node(pos)
 			return
 		end
-		areas:setPos1(name, areas.areas[id].pos1)
-		areas:setPos2(name, areas.areas[id].pos2)
+		local pos1, pos2 = areas.areas[id].pos1, areas.areas[id].pos2
+		areas:setPos1(name, pos1)
+		areas:setPos2(name, pos2)
 		minetest.chat_send_player(name, aS("Area @1 selected.", id))
+
+		if minetest.get_modpath("vizlib") then
+			vizlib.draw_area(vector.add(pos1, 0.5), vector.add(pos2, -0.5), {
+				color = "#7ba428",
+				player = puncher,
+			})
+		end
 	end
 })
 
