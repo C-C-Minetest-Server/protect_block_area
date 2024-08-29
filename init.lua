@@ -59,6 +59,20 @@ minetest.register_node("protect_block_area:protect", {
 		if pointed_thing.type ~= "node" then
 			return itemstack
 		end
+		local pos = get_node_place_position(pointed_thing)
+		if not pos then
+			return itemstack
+		end
+		local under_node = minetest.get_node(pointed_thing.under)
+		local under_def = minetest.registered_nodes[under_node.name]
+		if under_def.on_rightclick then
+			return under_def.on_rightclick(pointed_thing.under, under_node, placer, itemstack, pointed_thing)
+		else
+			local under_meta = minetest.get_meta(pointed_thing.under)
+			if under_meta:get_string("formspec") ~= "" then
+				return itemstack
+			end
+		end
 		if not placer:is_player() then
 			return itemstack
 		end
@@ -71,10 +85,6 @@ minetest.register_node("protect_block_area:protect", {
 		local privs = minetest.get_player_privs(pname)
 		if not privs[areas.config.self_protection_privilege] then
 			minetest.chat_send_player(pname, S("You are not allowed to protect!"))
-			return itemstack
-		end
-		local pos = get_node_place_position(pointed_thing)
-		if not pos then
 			return itemstack
 		end
 		if minetest.is_protected(pos, pname) then
