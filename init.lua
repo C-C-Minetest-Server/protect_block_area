@@ -40,21 +40,8 @@ local function get_node_place_position(pointed_thing)
 	end
 	return false
 end
-minetest.register_node("protect_block_area:protect", {
-	description = S("Protection Block") .. "\n" .. S("Create areas quickly"),
-	short_description = S("Protection Block"),
-	-- drawtype = "nodebox",
-	tiles = {
-		"default_stone.png^protector_overlay.png",
-		"default_stone.png^protector_overlay.png",
-		"default_stone.png^protector_overlay.png^protector_logo.png"
-	},
-	sounds = default.node_sound_stone_defaults(),
-	groups = { dig_immediate = 2, unbreakable = 1 },
-	is_ground_content = false,
-	paramtype = "light",
-	light_source = 4,
 
+local common_def = {
 	on_place = function(itemstack, placer, pointed_thing)
 		if pointed_thing.type ~= "node" then
 			return itemstack
@@ -110,11 +97,12 @@ minetest.register_node("protect_block_area:protect", {
 
 		minetest.chat_send_player(pname, aS("Area protected. ID: @1", id))
 
+		local name = itemstack:get_name()
 		if not minetest.is_creative_enabled(pname) then
 			itemstack:take_item(1)
 		end
 
-		minetest.set_node(pos, { name = "protect_block_area:protect" })
+		minetest.set_node(pos, { name = name })
 		local meta = minetest.get_meta(pos)
 		meta:set_int("AreaID", id)
 		meta:set_string("infotext", S("Area protection block, ID: @1", id))
@@ -169,7 +157,54 @@ minetest.register_node("protect_block_area:protect", {
 			})
 		end
 	end
-})
+}
+
+local function override(new_def)
+	for k, v in pairs(common_def) do
+		new_def[k] = new_def[k] or v
+	end
+	return new_def
+end
+
+minetest.register_node("protect_block_area:protect", override({
+	description = S("Protection Block") .. "\n" .. S("Create areas quickly"),
+	short_description = S("Protection Block"),
+	-- drawtype = "nodebox",
+	tiles = {
+		"default_stone.png^protector_overlay.png",
+		"default_stone.png^protector_overlay.png",
+		"default_stone.png^protector_overlay.png^protector_logo.png"
+	},
+	sounds = default.node_sound_stone_defaults(),
+	groups = { dig_immediate = 2, unbreakable = 1 },
+	is_ground_content = false,
+	paramtype = "light",
+	light_source = 4,
+}))
+
+-- TODO: Fix rotation
+-- minetest.register_node("protect_block_area:protect_logo", override({
+-- 	description = S("Protection Logo") .. "\n" .. S("Create areas quickly"),
+-- 	short_description = S("Protection Logo"),
+-- 	-- drawtype = "nodebox",
+-- 	tiles = {"protector_logo.png"},
+-- 	wield_image = "protector_logo.png",
+-- 	inventory_image = "protector_logo.png",
+-- 	use_texture_alpha = "clip",
+-- 	sounds = default.node_sound_stone_defaults(),
+-- 	groups = { dig_immediate = 2, unbreakable = 1 },
+-- 	is_ground_content = false,
+-- 	drawtype = "signlike",
+-- 	paramtype = "light",
+-- 	paramtype2 = "wallmounted",
+-- 	legacy_wallmounted = true,
+-- 	light_source = 4,
+-- 	sunlight_propagates = true,
+-- 	walkable = false,
+-- 	selection_box = {
+-- 		type = "wallmounted",
+-- 	},
+-- }))
 
 if minetest.get_modpath("protector") then
 	minetest.register_craft({
