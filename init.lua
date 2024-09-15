@@ -102,7 +102,7 @@ minetest.register_node("protect_block_area:protect", {
 		areas:save()
 
 		if minetest.get_modpath("vizlib") then
-			vizlib.draw_area(vector.add(pos1, 0.5), vector.add(pos2, -0.5), {
+			vizlib.draw_area(vector.add(pos1, -0.5), vector.add(pos2, 0.5), {
 				color = "#7ba428",
 				player = placer,
 			})
@@ -163,7 +163,7 @@ minetest.register_node("protect_block_area:protect", {
 		minetest.chat_send_player(name, aS("Area @1 selected.", id))
 
 		if minetest.get_modpath("vizlib") then
-			vizlib.draw_area(vector.add(pos1, 0.5), vector.add(pos2, -0.5), {
+			vizlib.draw_area(vector.add(pos1, -0.5), vector.add(pos2, 0.5), {
 				color = "#7ba428",
 				player = puncher,
 			})
